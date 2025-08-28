@@ -1,0 +1,9 @@
+<h1>Danh sách DemoFields</h1>
+<ul>
+  {% for obj in objects %}
+    <li>{{ obj.name }} - {{ obj.email }}</li>
+  {% empty %}
+    <li>Không có dữ liệu</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'home' %}">Về trang chủ</a>
