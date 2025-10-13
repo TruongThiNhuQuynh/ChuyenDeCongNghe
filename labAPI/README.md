@@ -103,3 +103,33 @@ curl "http://127.0.0.1:8000/api/filter/django-filter/?position=1&search=task&ord
 
 Note: for the `by-user` example, log in via the browsable API or use session/cookie auth to see results. The demo `get_queryset()` implementations are simple and intended to show filtering patterns — adapt them for your real models and user relations.
 
+Pagination demo
+---------------
+
+This project includes two example pagination endpoints:
+
+- GET /api/paginate/page/        — PageNumberPagination (default page param `?page=2`) using `StandardResultsSetPagination`.
+- GET /api/paginate/limitoffset/ — LimitOffsetPagination using `StandardLimitOffsetPagination` (params `?limit=5&offset=10`).
+
+These endpoints use the `ToDoItem` queryset and are ready to be tested once you have multiple items in the database.
+
+Quick test (cmd.exe) — create several items first (or use admin) then:
+
+# PageNumber pagination
+curl "http://127.0.0.1:8000/api/paginate/page/?page=1"
+curl "http://127.0.0.1:8000/api/paginate/page/?page=2"
+
+# LimitOffset pagination
+curl "http://127.0.0.1:8000/api/paginate/limitoffset/?limit=1&offset=0"
+curl "http://127.0.0.1:8000/api/paginate/limitoffset/?limit=1&offset=1"
+
+Typical PageNumber response structure:
+{
+    "count": 42,
+    "next": "http://127.0.0.1:8000/api/paginate/page/?page=2",
+    "previous": null,
+    "results": [ ... ]
+}
+
+Typical LimitOffset response structure matches the REST framework style and contains `count`, `next`, `previous`, and `results`.
+

@@ -90,3 +90,7 @@ REST_FRAMEWORK = {
     'SEARCH_PARAM': 'search',
     'ORDERING_PARAM': 'ordering',
 }
+
+# Pagination defaults (PageNumberPagination by default)
+REST_FRAMEWORK.setdefault('DEFAULT_PAGINATION_CLASS', 'rest_framework.pagination.PageNumberPagination')
+REST_FRAMEWORK.setdefault('PAGE_SIZE', 10)

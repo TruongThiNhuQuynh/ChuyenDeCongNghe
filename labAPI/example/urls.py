@@ -16,4 +16,7 @@ urlpatterns = [
     path('filter/by-url/<str:username>/', views.PurchaseListByURL.as_view(), name='filter-by-url'),
     path('filter/by-query/', views.PurchaseListByQueryParam.as_view(), name='filter-by-query'),
     path('filter/django-filter/', views.ProductListWithDjangoFilter.as_view(), name='filter-django'),
+    # pagination demo
+    path('paginate/page/', views.PaginatedToDoListPageNumber.as_view(), name='paginate-page'),
+    path('paginate/limitoffset/', views.PaginatedToDoListLimitOffset.as_view(), name='paginate-limitoffset'),
 ]

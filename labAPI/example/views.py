@@ -16,6 +16,7 @@ from .models import ToDoItem, ToDoList
 from .serializers import ToDoItemSerializer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from .pagination import StandardResultsSetPagination, StandardLimitOffsetPagination
 
 
 class CustomerReportCreate(generics.CreateAPIView):
@@ -128,3 +129,17 @@ class ProductListWithDjangoFilter(generics.ListAPIView):
     filterset_fields = ['position', 'title']
     search_fields = ['title']
     ordering_fields = ['position', 'id']
+
+
+class PaginatedToDoListPageNumber(generics.ListAPIView):
+    """Demonstrate PageNumberPagination using StandardResultsSetPagination"""
+    queryset = ToDoItem.objects.all()
+    serializer_class = ToDoItemSerializer
+    pagination_class = StandardResultsSetPagination
+
+
+class PaginatedToDoListLimitOffset(generics.ListAPIView):
+    """Demonstrate LimitOffsetPagination using StandardLimitOffsetPagination"""
+    queryset = ToDoItem.objects.all()
+    serializer_class = ToDoItemSerializer
+    pagination_class = StandardLimitOffsetPagination
