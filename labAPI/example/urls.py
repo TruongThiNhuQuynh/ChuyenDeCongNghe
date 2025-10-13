@@ -7,4 +7,8 @@ urlpatterns = [
     path('blog_posts/', views.BlogPostCreate.as_view(), name='blogpost-create'),
     path('billing/', views.BillingRecordCreate.as_view(), name='billing-create'),
     path('owner_example/', views.OwnerRecordExample.as_view(), name='owner-example'),
+    # caching demo
+    path('cached/post/', views.CachedPostView.as_view(), name='cached-post'),
+    path('cached/profile/', views.CachedProfileView.as_view(), name='cached-profile'),
+    path('cached/users/', views.cached_user_list, name='cached-user-list'),
 ]

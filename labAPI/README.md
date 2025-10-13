@@ -48,3 +48,35 @@ curl -X POST http://127.0.0.1:8000/api/billing/ -H "Content-Type: application/js
 Notes for screenshots:
 - After running a failed request you will see JSON errors. Take screenshots of these responses as evidence for the pull request.
 - Use admin to create a ToDoList with id=1 before hitting the ToDoItem endpoints.
+
+Caching demo
+------------
+
+The project includes endpoints that demonstrate Django's caching decorators used with DRF views.
+
+Endpoints:
+
+- GET /api/cached/post/     — class-based view with @cache_page; response includes `timestamp` so you can see caching in action.
+- GET /api/cached/profile/  — class-based view cached and varied on `Authorization` header.
+- GET /api/cached/users/    — function-based view (uses `@api_view`) cached and varied on cookie.
+
+Quick test steps (cmd.exe):
+
+1. Start the server
+
+    .venv\Scripts\python.exe manage.py runserver
+
+2. Call the same endpoint twice (timestamp shows caching)
+
+    curl http://127.0.0.1:8000/api/cached/post/
+    curl http://127.0.0.1:8000/api/cached/post/
+
+The two responses should show the same `timestamp` if the first response was cached.
+
+To test vary_on_headers (profile): send with and without an Authorization header and compare timestamps:
+
+    curl http://127.0.0.1:8000/api/cached/profile/
+    curl -H "Authorization: Token abc" http://127.0.0.1:8000/api/cached/profile/
+
+To test vary_on_cookie (users): the cached response is per cookie; you can use curl's `-b` and `-c` to set cookiejar, or test in browser.
+
