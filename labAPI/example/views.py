@@ -11,6 +11,11 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from django.utils import timezone
 import time
+from rest_framework import generics
+from .models import ToDoItem, ToDoList
+from .serializers import ToDoItemSerializer
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class CustomerReportCreate(generics.CreateAPIView):
@@ -77,3 +82,49 @@ def cached_user_list(request):
         'timestamp': time.time(),
     }
     return Response(data)
+
+
+# --- Filtering demo views ---
+class PurchaseListByUser(generics.ListAPIView):
+    """Filter queryset against request.user (example uses ToDoItem)."""
+    serializer_class = ToDoItemSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        # For demo: return items belonging to the first ToDoList if authenticated, else none
+        if user and user.is_authenticated:
+            # this is just a demo — normally you'd filter by a user foreign key
+            lists = ToDoList.objects.all()
+            if lists.exists():
+                return ToDoItem.objects.filter(list=lists.first())
+        return ToDoItem.objects.none()
+
+
+class PurchaseListByURL(generics.ListAPIView):
+    serializer_class = ToDoItemSerializer
+
+    def get_queryset(self):
+        username = self.kwargs.get('username')
+        # demo: filter by ToDoList name matching username
+        return ToDoItem.objects.filter(list__name=username)
+
+
+class PurchaseListByQueryParam(generics.ListAPIView):
+    serializer_class = ToDoItemSerializer
+
+    def get_queryset(self):
+        queryset = ToDoItem.objects.all()
+        list_name = self.request.query_params.get('list_name')
+        if list_name is not None:
+            queryset = queryset.filter(list__name=list_name)
+        return queryset
+
+
+class ProductListWithDjangoFilter(generics.ListAPIView):
+    """Example showing DjangoFilterBackend with filterset_fields."""
+    queryset = ToDoItem.objects.all()
+    serializer_class = ToDoItemSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['position', 'title']
+    search_fields = ['title']
+    ordering_fields = ['position', 'id']

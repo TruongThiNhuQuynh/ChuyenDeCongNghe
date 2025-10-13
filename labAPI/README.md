@@ -80,3 +80,26 @@ To test vary_on_headers (profile): send with and without an Authorization header
 
 To test vary_on_cookie (users): the cached response is per cookie; you can use curl's `-b` and `-c` to set cookiejar, or test in browser.
 
+Filtering demo
+--------------
+
+The project includes several views demonstrating different filtering strategies:
+
+- GET /api/filter/by-user/         — example get_queryset() filtered by request.user (requires authentication to return items in demo)
+- GET /api/filter/by-url/<username>/ — example filtering using a URL path parameter
+- GET /api/filter/by-query/?list_name=Name — example filtering using query parameters
+- GET /api/filter/django-filter/?position=1&search=term&ordering=-position — example using DjangoFilterBackend + SearchFilter + OrderingFilter
+
+Test examples (cmd.exe):
+
+# Filter by query param (list_name)
+curl "http://127.0.0.1:8000/api/filter/by-query/?list_name=My%20List"
+
+# Filter by URL
+curl http://127.0.0.1:8000/api/filter/by-url/My%20List/
+
+# DjangoFilterBackend example: filter, search and ordering
+curl "http://127.0.0.1:8000/api/filter/django-filter/?position=1&search=task&ordering=-position"
+
+Note: for the `by-user` example, log in via the browsable API or use session/cookie auth to see results. The demo `get_queryset()` implementations are simple and intended to show filtering patterns — adapt them for your real models and user relations.
+

@@ -11,4 +11,9 @@ urlpatterns = [
     path('cached/post/', views.CachedPostView.as_view(), name='cached-post'),
     path('cached/profile/', views.CachedProfileView.as_view(), name='cached-profile'),
     path('cached/users/', views.cached_user_list, name='cached-user-list'),
+    # filtering demo
+    path('filter/by-user/', views.PurchaseListByUser.as_view(), name='filter-by-user'),
+    path('filter/by-url/<str:username>/', views.PurchaseListByURL.as_view(), name='filter-by-url'),
+    path('filter/by-query/', views.PurchaseListByQueryParam.as_view(), name='filter-by-query'),
+    path('filter/django-filter/', views.ProductListWithDjangoFilter.as_view(), name='filter-django'),
 ]
